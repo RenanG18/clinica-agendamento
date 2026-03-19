@@ -1,16 +1,17 @@
 <template>
   <div class="container">
     <div class="card">
-      <h2>🔐 Login</h2>
+      <h2>📝 Cadastro</h2>
 
+      <input v-model="name" placeholder="Nome" />
       <input v-model="email" placeholder="Email" />
       <input v-model="password" type="password" placeholder="Senha" />
 
-      <button @click="login">Entrar</button>
+      <button @click="register">Cadastrar</button>
 
       <p class="link">
-        Não tem conta?
-        <router-link to="/register">Cadastrar</router-link>
+        Já tem conta?
+        <router-link to="/">Fazer login</router-link>
       </p>
     </div>
   </div>
@@ -22,37 +23,34 @@ import api from "../services/api"
 export default {
   data() {
     return {
+      name: "",
       email: "",
       password: ""
     }
   },
 
   methods: {
-    async login() {
+    async register() {
       try {
-        const res = await api.post("/auth/login", {
+        if (!this.name || !this.email || !this.password) {
+          alert("Preencha todos os campos!")
+          return
+        }
+
+        await api.post("/auth/register", {
+          name: this.name,
           email: this.email,
           password: this.password
         })
 
-        console.log("RESPOSTA BACKEND:", res.data)
+        alert("Cadastro realizado com sucesso!")
 
-        // 🔒 salva token
-        localStorage.setItem("token", res.data.token)
-
-        alert("Login realizado com sucesso!")
-
-        // 👉 redireciona
-        this.$router.push("/appointment")
+        // ✅ CORRETO
+        this.$router.push("/")
 
       } catch (error) {
-        console.error("ERRO COMPLETO:", error)
-
-        if (error.response && error.response.data.message) {
-          alert(error.response.data.message)
-        } else {
-          alert("Erro ao fazer login")
-        }
+        console.error("Erro no cadastro:", error)
+        alert("Erro ao cadastrar usuário")
       }
     }
   }
@@ -73,6 +71,10 @@ export default {
   background: #f4f6f8;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
 }
 
 input {
@@ -99,5 +101,12 @@ button:hover {
 
 .link {
   margin-top: 15px;
+  font-size: 14px;
+}
+
+a {
+  color: #2c7be5;
+  text-decoration: none;
+  font-weight: bold;
 }
 </style>

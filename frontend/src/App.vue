@@ -1,11 +1,12 @@
-<script setup></script>
-
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
-</template>
+  <div>
+    <h1>Clínica</h1>
 
-<style scoped></style>
+    <router-link to="/">Login</router-link> |
+    <router-link to="/register">Cadastro</router-link> |
+    <router-link to="/appointment">Agendar</router-link> |
+    <router-link to="/admin">Admin</router-link>
+
+    <router-view />
+  </div>
+</template>

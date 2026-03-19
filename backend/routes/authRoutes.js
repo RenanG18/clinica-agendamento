@@ -1,7 +1,92 @@
-const router = require("express").Router()
-const authController = require("../controllers/authController")
+const express = require("express")
+const router = express.Router()
 
-router.post("/register",authController.register)
-router.post("/login",authController.login)
+const User = require("../models/User")
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
+
+// 🟢 CADASTRO
+router.post("/register", async (req, res) => {
+  try {
+    const { name, email, password } = req.body
+
+    // 🔒 validação básica
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Preencha todos os campos" })
+    }
+
+    // 🔍 verifica se já existe usuário
+    const userExistente = await User.findOne({ email: email.toLowerCase() })
+
+    if (userExistente) {
+      return res.status(400).json({ message: "Usuário já existe" })
+    }
+
+    // 🔐 criptografar senha
+    const senhaCriptografada = await bcrypt.hash(password, 10)
+
+    const user = new User({
+      name,
+      email: email.toLowerCase(),
+      password: senhaCriptografada
+    })
+
+    await user.save()
+
+    res.status(201).json({ message: "Usuário criado com sucesso" })
+
+  } catch (error) {
+    console.error("Erro no cadastro:", error)
+    res.status(500).json({ message: "Erro no cadastro" })
+  }
+})
+
+
+// 🔐 LOGIN
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body
+
+    // 🔒 validação
+    if (!email || !password) {
+      return res.status(400).json({ message: "Preencha email e senha" })
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() })
+
+    if (!user) {
+      return res.status(400).json({ message: "Usuário não encontrado" })
+    }
+
+    let senhaValida = false
+
+    // 🔥 suporta senha antiga e nova
+    if (user.password.startsWith("$2b$")) {
+      senhaValida = await bcrypt.compare(password, user.password)
+    } else {
+      senhaValida = password === user.password
+    }
+
+    if (!senhaValida) {
+      return res.status(400).json({ message: "Senha inválida" })
+    }
+
+    // 🔑 gerar token
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    )
+
+    res.json({
+      message: "Login realizado com sucesso",
+      token
+    })
+
+  } catch (error) {
+    console.error("Erro no login:", error)
+    res.status(500).json({ message: "Erro no login" })
+  }
+})
 
 module.exports = router
