@@ -12,6 +12,15 @@
 - Previsão do clima
 - Painel admin
 
+### Banco de Dados:
+- MongoDB Atlas
+
+### Outros:
+- JWT (autenticação)
+- bcrypt (criptografia de senha)
+- ViaCEP (consulta de endereço)
+- OpenWeatherMap (previsão do tempo)
+  
 ## Como rodar o projeto
 
 ### Backend
