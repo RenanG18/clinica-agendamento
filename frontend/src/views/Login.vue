@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="card">
-      <h2>🔐 Login</h2>
+      <h2>Login</h2>
 
       <input v-model="email" placeholder="Email" />
       <input v-model="password" type="password" placeholder="Senha" />
@@ -37,12 +37,12 @@ export default {
 
         console.log("RESPOSTA BACKEND:", res.data)
 
-        // 🔒 salva token
+        
         localStorage.setItem("token", res.data.token)
 
         alert("Login realizado com sucesso!")
 
-        // 👉 redireciona
+        
         this.$router.push("/appointment")
 
       } catch (error) {

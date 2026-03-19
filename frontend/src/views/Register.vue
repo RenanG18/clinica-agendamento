@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="card">
-      <h2>📝 Cadastro</h2>
+      <h2> Cadastro</h2>
 
       <input v-model="name" placeholder="Nome" />
       <input v-model="email" placeholder="Email" />
@@ -45,7 +45,7 @@ export default {
 
         alert("Cadastro realizado com sucesso!")
 
-        // ✅ CORRETO
+        
         this.$router.push("/")
 
       } catch (error) {

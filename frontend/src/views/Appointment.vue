@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="card">
-      <h2>📅 Agendar Consulta</h2>
+      <h2>Agendar Consulta</h2>
 
       <input v-model="patient" placeholder="Nome do paciente" />
 
@@ -34,10 +34,10 @@
       
       <div v-if="climaCarregado">
         <p v-if="vaiChover" class="alerta">
-          🌧️ Atenção: previsão de chuva no dia!
+           Atenção: previsão de chuva no dia!
         </p>
         <p v-else class="ok">
-          ☀️ Clima favorável
+           Clima favorável
         </p>
       </div>
 
