@@ -10,6 +10,7 @@
 - Agendamento de consultas
 - Consulta de CEP
 - Previsão do clima
+- Painel admin
 
 ## Como rodar o projeto
 
